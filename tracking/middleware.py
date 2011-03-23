@@ -18,23 +18,16 @@ class UserTrackingMiddleware:
         # create some useful variables
         user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
 
-        if hasattr(request, 'session'):
-            # use the current session key if we can
-            session_key = request.session.session_key
-        else:
-            return
-
-        # if we get here, the URL needs to be tracked
-        # determine what time it is
+         # determine what time it is
         now = datetime.datetime.now()
 
 
-        # for some reason, Visitor.objects.get_or_create was not working here
+
         user = request.user
         try:
             userprofile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
-            userprofile=UserProfile.create(userrequest.user)
+            userprofile=UserProfile.objects.create(userrequest.user)
 
         # determine whether or not the user is logged in
         if isinstance(user, AnonymousUser):
