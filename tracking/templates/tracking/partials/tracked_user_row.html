@@ -1,7 +1,8 @@
 {% extends 'generic/partials/partial_row.html' %}
 {% block remaining_row_content %}
-    <td>{{ object.user }}</td>
-    <td>{{ object.last_update}}</td>
-    <td>{{ object.page_views}}</td>
-    <td>{{ object.time_on_site}}</td>
+    <td>{{ object }}</td>
+     <td>{{ object.user.groups.all|first}}</td>
+    <td>{{ object.userprofile.last_update|date:"m/d/Y H:i:s"}}</td>
+    <td>{{ object.userprofile.page_views}}</td>
+    <td>{{ object.userprofile.time_on_site}}</td>
 {% endblock %}
