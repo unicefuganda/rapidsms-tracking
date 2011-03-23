@@ -3,13 +3,11 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    user_agent = models.CharField(max_length=255)
-    session_key = models.CharField(max_length=40)
-    ip_address = models.CharField(max_length=20)
-    url = models.CharField(max_length=255)
+    user_agent = models.CharField(max_length=255,null=True)
     page_views = models.PositiveIntegerField(default=0)
-    session_start = models.DateTimeField()
-    last_update = models.DateTimeField()
+    session_start = models.DateTimeField(null=True)
+    last_update = models.DateTimeField(null=True)
+    user_agent=models.CharField(max_length=255,null=True)
 
 
     def _time_on_site(self):
@@ -32,4 +30,3 @@ class UserProfile(models.Model):
 
     class Meta:
         ordering = ('-last_update',)
-        unique_together = ('session_key', 'ip_address',)
