@@ -1,4 +1,4 @@
 from django.contrib import admin
-from tracking.models import UserProfile
+from tracking.models import UserLog
 
-admin.site.register(UserProfile)
+admin.site.register(UserLog)

@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from generic.views import generic
 from django.contrib.auth.decorators import login_required
-from tracking.models import UserProfile
+from tracking.models import UserLog
 from generic.sorters import SimpleSorter, TupleSorter
 from django.contrib.auth.models import User
 
@@ -16,10 +16,10 @@ urlpatterns = patterns('',
                                    ('User', True, 'username', SimpleSorter(),),
                                    ('Group', True, 'groups', SimpleSorter(),),
                                     ('Location', True, 'contact__reporting_location', SimpleSorter(),),
-                                   ('Last Update', True, 'userprofile__last_update', SimpleSorter(),),
-                                   ('Page Views', True, 'userprofile__page_views', SimpleSorter(),),
-                                   ('Time On Site', False, 'userprofile__time_on_site', None,),
-                                   ('Last Page Visited', True, 'userprofile__url', SimpleSorter(),),
+                                   ('Last Update', True, 'userlog__last_update', SimpleSorter(),),
+                                   ('Page Views', True, 'userlog__page_views', SimpleSorter(),),
+                                   ('Time On Site', False, 'userlog__time_on_site', None,),
+                                   ('Last Page Visited', True, 'userlog__url', SimpleSorter(),),
                                    ],
 
                            }),

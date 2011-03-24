@@ -1,5 +1,5 @@
 import datetime
-from tracking.models import UserProfile
+from tracking.models import UserLog
 from django.contrib.auth.models import AnonymousUser
 from django.conf import settings
 
@@ -26,37 +26,33 @@ class UserTrackingMiddleware:
                 return
         # create some useful variables
         user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
-
          # determine what time it is
         now = datetime.datetime.now()
-
         user = request.user
-
-           # determine whether or not the user is logged in
         if isinstance(user, AnonymousUser):
-            return
-
+            user = None
         try:
-            userprofile = UserProfile.objects.get(user=request.user)
-        except UserProfile.DoesNotExist:
-            userprofile=UserProfile.objects.create(user=request.user)
-
+            userlog = UserLog.objects.get(session_key=request.session.session_key)
+        except UserLog.DoesNotExist:
+            userlog=UserLog.objects.create(session_key=request.session.session_key,user=user)
+        except:
+            userlog=UserLog.objects.create(session_key=request.META.get('REMOTE_ADDR','unkown'),user=user)
 
 
         # update the tracking information
-        userprofile.user_agent = user_agent
+        userlog.user_agent = user_agent
 
-        userprofile.url=request.path
+        userlog.url=request.path
 
-        # if the visitor record is new, or the visitor hasn't been here for
-        # at least an hour, update their referrer URL
+        userlog.referrer = request.META.get('HTTP_REFERER', 'unknown')[:255]
+        userlog.ip_address=request.META.get('REMOTE_ADDR','unkown')[:255]
         one_hour_ago = now - datetime.timedelta(hours=1)
-        if not userprofile.last_update or userprofile.last_update <= one_hour_ago:
+        if not userlog.last_update or userlog.last_update <= one_hour_ago:
             # reset the number of pages they've been to
-            userprofile.page_views = 0
-            userprofile.session_start = now
+            userlog.page_views = 0
+            userlog.session_start = now
 
-        userprofile.url = request.path
-        userprofile.page_views += 1
-        userprofile.last_update = now
-        userprofile.save()
+        userlog.url = request.path
+        userlog.page_views += 1
+        userlog.last_update = now
+        userlog.save()

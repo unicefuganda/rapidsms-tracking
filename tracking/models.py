@@ -1,16 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+
+
+class UserLog(models.Model):
+    user = models.ForeignKey(User,null=True,related_name='userlog')
     user_agent = models.CharField(max_length=255,null=True)
     page_views = models.PositiveIntegerField(default=0)
     url = models.CharField(max_length=255,null=True)
     session_start = models.DateTimeField(null=True)
     last_update = models.DateTimeField(null=True)
     user_agent=models.CharField(max_length=255,null=True)
-
-
+    session_key=models.CharField(max_length=255,null=True)
+    ip_address=models.CharField(max_length=255,null=True)
+    referrer=models.CharField(max_length=255,null=True)
+    time_on_site = models.PositiveIntegerField(default=0)
+    
     def _time_on_site(self):
         """
         Attempts to determine the amount of time a visitor has spent on the
@@ -27,10 +33,18 @@ class UserProfile(models.Model):
             return u'%i:%02i:%02i' % (hours, minutes, seconds)
         else:
             return u'unknown'
-    time_on_site = property(_time_on_site)
+    timeon_site = property(_time_on_site)
 
-    def _location(self):
-        return self.user.contact.all()[0].reporting_location
-    location = property(_location)
+    def average_time_on_site(self):
+        return UserLog.objects.filter(user=self.user).aggregate(Avg('time_on_site')).get('average_time_on_site',0)
+
+
+    def average_time_onsite(self):
+        pass
+    def save(self,*args,**kwargs):
+        self.time_on_site=self.timeon_site
+        super(UserLog,self).save(*args,**kwargs)
+
     class Meta:
         ordering = ('-last_update',)
+
