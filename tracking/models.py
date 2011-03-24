@@ -5,6 +5,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     user_agent = models.CharField(max_length=255,null=True)
     page_views = models.PositiveIntegerField(default=0)
+    url = models.CharField(max_length=255,null=True)
     session_start = models.DateTimeField(null=True)
     last_update = models.DateTimeField(null=True)
     user_agent=models.CharField(max_length=255,null=True)

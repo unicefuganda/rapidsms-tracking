@@ -14,7 +14,16 @@ class UserTrackingMiddleware:
     def process_request(self, request):
         # don't process AJAX requests
         if request.is_ajax(): return
+        prefixes = []
 
+        # don't track media file requests
+        if settings.MEDIA_URL:
+            prefixes.append(settings.MEDIA_URL)
+        if settings.ADMIN_MEDIA_PREFIX:
+            prefixes.append(settings.ADMIN_MEDIA_PREFIX)
+        for prefix in prefixes:
+            if request.path.startswith(prefix):
+                return
         # create some useful variables
         user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
 
@@ -38,6 +47,8 @@ class UserTrackingMiddleware:
 
         # update the tracking information
         userprofile.user_agent = user_agent
+
+        userprofile.url=request.path
 
         # if the visitor record is new, or the visitor hasn't been here for
         # at least an hour, update their referrer URL
