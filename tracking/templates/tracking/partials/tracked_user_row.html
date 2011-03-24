@@ -1,7 +1,18 @@
 {% extends 'generic/partials/partial_row.html' %}
 {% block remaining_row_content %}
     <td>{{ object }}</td>
-     <td>{{ object.groups.all|first}}</td>
+     <td> <ul>
+            {% for g in object.groups.all %}
+                <li>
+                    {{ g.name }}
+                </li>
+            {% endfor %}
+        </ul></td>
+    <td> <ul>{% for c in object.contact.all %}
+                <span>
+                    {{ c.reporting_location }}
+                </span>
+            {% endfor %}</ul></td>
     <td>{{ object.userprofile.last_update|date:"m/d/Y H:i:s"}}</td>
     <td>{{ object.userprofile.page_views}}</td>
     <td>{{ object.userprofile.time_on_site}}</td>

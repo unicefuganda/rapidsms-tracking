@@ -30,8 +30,6 @@ class UserTrackingMiddleware:
          # determine what time it is
         now = datetime.datetime.now()
 
-
-
         user = request.user
 
            # determine whether or not the user is logged in

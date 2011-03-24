@@ -29,5 +29,8 @@ class UserProfile(models.Model):
             return u'unknown'
     time_on_site = property(_time_on_site)
 
+    def _location(self):
+        return self.user.contact.all()[0].reporting_location
+    location = property(_location)
     class Meta:
         ordering = ('-last_update',)

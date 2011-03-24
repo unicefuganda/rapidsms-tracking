@@ -15,6 +15,7 @@ urlpatterns = patterns('',
                            'columns':[
                                    ('User', True, 'username', SimpleSorter(),),
                                    ('Group', True, 'groups', SimpleSorter(),),
+                                    ('Location', True, 'contact__reporting_location', SimpleSorter(),),
                                    ('Last Update', True, 'userprofile__last_update', SimpleSorter(),),
                                    ('Page Views', True, 'userprofile__page_views', SimpleSorter(),),
                                    ('Time On Site', False, 'userprofile__time_on_site', None,),
