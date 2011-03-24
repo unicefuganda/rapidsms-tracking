@@ -24,14 +24,17 @@ class UserTrackingMiddleware:
 
 
         user = request.user
+
+           # determine whether or not the user is logged in
+        if isinstance(user, AnonymousUser):
+            return
+
         try:
             userprofile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
-            userprofile=UserProfile.objects.create(userrequest.user)
+            userprofile=UserProfile.objects.create(user=request.user)
 
-        # determine whether or not the user is logged in
-        if isinstance(user, AnonymousUser):
-            return
+
 
         # update the tracking information
         userprofile.user_agent = user_agent
