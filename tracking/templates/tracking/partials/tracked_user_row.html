@@ -1,6 +1,6 @@
 {% extends 'generic/partials/partial_row.html' %}
 {% block remaining_row_content %}
-    <td>{{ object }}</td>
+    <td>{{ object.username }}</td>
      <td> <ul>
             {% for g in object.groups.all %}
                 <li>
@@ -13,9 +13,15 @@
                     {{ c.reporting_location }}
                 </span>
             {% endfor %}</ul></td>
-    <td>{{ object.userlog.all.0.last_update|date:"m/d/Y H:i:s"}}</td>
-    <td>{{ object.userlog.all.0.page_views}}</td>
-    <td>{{ object.userlog.all.0.url}}</td>
-    <td>{{ object.userlog.all.0.average_time_on_site|floatformat}}</td>
-    <td>{{ object.userlog.all.0.average_weekly_visits|floatformat}}</td>
+    {% if object.userlog|length %}
+        <td>{{ object.userlog.all.0.last_update|date:"m/d/Y H:i:s"}}</td>
+        <td>{{ object.userlog.all.0.page_views}}</td>
+        <td>{{ object.userlog.all.0.url}}</td>
+    {% else %}
+        <td>N/A</td>
+        <td>N/A</td>
+        <td>N/A</td>
+    {% endif %}
+    <td>{{ object.avg_time|floatformat}}</td>
+    <td>{{ object.avg_weekly|floatformat}}</td>
 {% endblock %}

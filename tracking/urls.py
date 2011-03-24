@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 from tracking.models import UserLog
 from generic.sorters import SimpleSorter, TupleSorter
 from django.contrib.auth.models import User
-
+from .utils import get_users
 
 urlpatterns = patterns('',
                        url(r'^tracking/userlist/$', login_required(generic), {
                            'model':User,
+                           'queryset':get_users,
                            'objects_per_page':10,
                            'partial_row':'tracking/partials/tracked_user_row.html',
                            'base_template':'tracking/tracked_users_base.html',
