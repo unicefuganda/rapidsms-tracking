@@ -28,15 +28,21 @@ class UserTrackingMiddleware:
         user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
          # determine what time it is
         now = datetime.datetime.now()
+        if hasattr(request, 'session'):
+            # use the current session key if we can
+            session_key = request.session.session_key
+        else:
+            # otherwise just fake a session key
+            session_key = '%s:%s' % (ip_address, user_agent)
         user = request.user
         ip_address = request.META.get('HTTP_X_FORWARDED_FOR',
                                   request.META.get('REMOTE_ADDR', '127.0.0.1'))
         if isinstance(user, AnonymousUser):
             user = None
         try:
-            userlog = UserLog.objects.get(session_key=request.session.session_key)
+            userlog = UserLog.objects.get(session_key=session_key)
         except UserLog.DoesNotExist:
-            userlog=UserLog.objects.create(session_key=request.session.session_key,user=user)
+            userlog=UserLog.objects.create(session_key=session_key,user=user)
 
 
 
