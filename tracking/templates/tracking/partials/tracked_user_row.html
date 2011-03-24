@@ -15,7 +15,7 @@
             {% endfor %}</ul></td>
     <td>{{ object.userlog.all.0.last_update|date:"m/d/Y H:i:s"}}</td>
     <td>{{ object.userlog.all.0.page_views}}</td>
-    <td>{{ object.userlog.all.0.time_on_site}}</td>
     <td>{{ object.userlog.all.0.url}}</td>
-    <td>{{ object.userlog.all.0.average_time_on_site}}</td>
+    <td>{{ object.userlog.all.0.average_time_on_site|floatformat}}</td>
+    <td>{{ object.userlog.all.0.average_weekly_visits|floatformat}}</td>
 {% endblock %}

@@ -18,8 +18,9 @@ urlpatterns = patterns('',
                                     ('Location', True, 'contact__reporting_location', SimpleSorter(),),
                                    ('Last Update', True, 'userlog__last_update', SimpleSorter(),),
                                    ('Page Views', True, 'userlog__page_views', SimpleSorter(),),
-                                   ('Time On Site', False, 'userlog__time_on_site', None,),
                                    ('Last Page Visited', True, 'userlog__url', SimpleSorter(),),
+                                   ('Average Time On Site', True, 'userlog__time_on_site', SimpleSorter(),),
+                                   ('Average Weekly Visits', True, 'userlog__time_on_site', SimpleSorter(),)
                                    ],
 
                            }),

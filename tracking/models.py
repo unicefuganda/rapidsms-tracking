@@ -18,8 +18,10 @@ class UserLog(models.Model):
     time_on_site = models.PositiveIntegerField(default=0)
     
     def average_time_on_site(self):
-        return UserLog.objects.filter(user=self.user).aggregate(Avg('time_on_site')).get('time_on_site__avg',0)
+        return User.objects.filter(username='mossplix').extra( select={'avg_time':'select avg(extract (epoch from (last_update - session_start))) from tracking_userlog where user_id=%d'%self.user.pk})[0].avg_time
 
+    def average_weekly_visits(self):
+        return User.objects.filter(pk=self.user.pk).extra( select={'avg_weekly':'select sum(weekly_visits) / count(*) as weekly_average from (select extract(week from session_start) as week, count(*) as weekly_visits from tracking_userlog where user_id=%d group by week) fullstats'%self.user.pk})[0].avg_weekly
     def save(self,*args,**kwargs):
         try:
             self.time_on_site=(self.last_update - self.session_start).seconds
