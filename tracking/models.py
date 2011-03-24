@@ -17,7 +17,7 @@ class UserLog(models.Model):
     referrer=models.CharField(max_length=255,null=True)
     time_on_site = models.PositiveIntegerField(default=0)
     
-    def _time_on_site(self):
+    def _timeon_site(self):
         """
         Attempts to determine the amount of time a visitor has spent on the
         site based upon their information that's in the database.
@@ -33,7 +33,7 @@ class UserLog(models.Model):
             return u'%i:%02i:%02i' % (hours, minutes, seconds)
         else:
             return u'unknown'
-    timeon_site = property(_time_on_site)
+    timeon_site = property(_timeon_site)
 
     def average_time_on_site(self):
         return UserLog.objects.filter(user=self.user).aggregate(Avg('time_on_site')).get('average_time_on_site',0)
@@ -42,7 +42,7 @@ class UserLog(models.Model):
     def average_time_onsite(self):
         pass
     def save(self,*args,**kwargs):
-        self.time_on_site=self.timeon_site
+        self.time_on_site=(self.last_update - self.session_start).seconds
         super(UserLog,self).save(*args,**kwargs)
 
     class Meta:
