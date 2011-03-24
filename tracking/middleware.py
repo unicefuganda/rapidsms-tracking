@@ -29,14 +29,15 @@ class UserTrackingMiddleware:
          # determine what time it is
         now = datetime.datetime.now()
         user = request.user
+        ip_address = request.META.get('HTTP_X_FORWARDED_FOR',
+                                  request.META.get('REMOTE_ADDR', '127.0.0.1'))
         if isinstance(user, AnonymousUser):
             user = None
         try:
             userlog = UserLog.objects.get(session_key=request.session.session_key)
         except UserLog.DoesNotExist:
             userlog=UserLog.objects.create(session_key=request.session.session_key,user=user)
-        except:
-            userlog=UserLog.objects.create(session_key=request.META.get('REMOTE_ADDR','unkown'),user=user)
+
 
 
         # update the tracking information
@@ -45,7 +46,7 @@ class UserTrackingMiddleware:
         userlog.url=request.path
 
         userlog.referrer = request.META.get('HTTP_REFERER', 'unknown')[:255]
-        userlog.ip_address=request.META.get('REMOTE_ADDR','unkown')[:255]
+        userlog.ip_address=ip_address
         one_hour_ago = now - datetime.timedelta(hours=1)
         if not userlog.last_update or userlog.last_update <= one_hour_ago:
             # reset the number of pages they've been to

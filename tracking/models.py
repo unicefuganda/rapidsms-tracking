@@ -36,7 +36,7 @@ class UserLog(models.Model):
     timeon_site = property(_timeon_site)
 
     def average_time_on_site(self):
-        return UserLog.objects.filter(user=self.user).aggregate(Avg('time_on_site')).get('average_time_on_site',0)
+        return UserLog.objects.filter(user=self.user).aggregate(Avg('time_on_site')).get('time_on_site__avg',0)
 
 
     def average_time_onsite(self):
