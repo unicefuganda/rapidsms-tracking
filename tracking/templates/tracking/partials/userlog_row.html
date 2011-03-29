@@ -1,0 +1,18 @@
+{% extends 'generic/partials/partial_row.html' %}
+{% block remaining_row_content %}
+    <td>
+        {{ object.user_agent }}
+    </td>
+    <td>
+        {{ object.page_views }}
+    </td>
+    <td>
+        {{ object.url }}
+    </td>
+    <td>
+        {{ object.session_start|date:"m/d/Y H:i:s" }}
+    </td>
+    <td>
+        {{ objects.last_update|date:"m/d/Y H:i:s" }}
+    </td>
+{% endblock %}

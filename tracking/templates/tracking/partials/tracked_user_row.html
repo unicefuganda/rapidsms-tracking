@@ -1,6 +1,6 @@
 {% extends 'generic/partials/partial_row.html' %}
 {% block remaining_row_content %}
-    <td>{{ object.username }}</td>
+    <td><a href="/tracking/{{ object.pk }}/user/">{{ object.username }}</a></td>
     <td>
         <ul>
             {% for g in object.groups.all %}
