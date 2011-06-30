@@ -40,11 +40,9 @@ class UserTrackingMiddleware:
         if isinstance(user, AnonymousUser):
             user = None
         try:
-            userlog = UserLog.objects.get(session_key=session_key)
+            userlog = UserLog.objects.get(session_key=session_key,user=user,ip_address=ip_address)
         except UserLog.DoesNotExist:
-            userlog=UserLog.objects.create(session_key=session_key,user=user)
-
-
+            userlog=UserLog.objects.create(session_key=session_key,user=user,ip_address=ip_address)
 
         # update the tracking information
         userlog.user_agent = user_agent
