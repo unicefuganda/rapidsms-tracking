@@ -39,9 +39,11 @@ class UserTrackingMiddleware:
                                   request.META.get('REMOTE_ADDR', '127.0.0.1'))
         if isinstance(user, AnonymousUser):
             user = None
+
+        userlogs = UserLog.objects.filter(session_key=session_key,user=user,ip_address=ip_address)
         try:
-            userlog = UserLog.objects.get(session_key=session_key,user=user,ip_address=ip_address)
-        except UserLog.DoesNotExist:
+            userlog=userlogs[0]
+        except IndexError:
             userlog=UserLog.objects.create(session_key=session_key,user=user,ip_address=ip_address)
 
         # update the tracking information
